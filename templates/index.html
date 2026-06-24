@@ -8,6 +8,10 @@
   <meta property="og:title" content="{{ site.name }}">
   <meta property="og:description" content="{{ site.description }}">
   <meta property="og:type" content="website">
+  {% if adsense.enabled %}
+  <meta name="google-adsense-account" content="{{ adsense.client_id }}">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ adsense.client_id }}" crossorigin="anonymous"></script>
+  {% endif %}
   <title>{{ site.name }}{% if page.title %} | {{ page.title }}{% endif %}</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
@@ -378,6 +382,27 @@
       gap: 16px;
     }
 
+    .ad-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+      gap: 16px;
+      align-items: center;
+    }
+
+    .ad-slot {
+      min-height: 250px;
+      border-radius: 16px;
+      border: 1px dashed rgba(148, 163, 184, 0.2);
+      background: rgba(3, 7, 18, 0.62);
+      overflow: hidden;
+    }
+
+    .ad-slot ins {
+      display: block;
+      width: 100%;
+      min-height: 250px;
+    }
+
     .content-card {
       background: var(--surface-strong);
       border: 1px solid var(--line);
@@ -645,6 +670,7 @@
       .tool-grid,
       .grid-3,
       .grid-2,
+      .ad-shell,
       .inline-grid,
       .split-toggle {
         grid-template-columns: 1fr;
@@ -1134,6 +1160,29 @@
           {% endfor %}
         </div>
       </section>
+
+      {% if adsense.show_home_unit %}
+        <section class="section">
+          <div class="ad-shell content-card">
+            <div>
+              <span class="meta">Sponsored</span>
+              <h3 style="margin-top: 12px;">Ad space</h3>
+              <p>Placed only on monetized pages. The privacy page stays ad-free.</p>
+            </div>
+            <div class="ad-slot" aria-label="Advertisement">
+              <ins class="adsbygoogle"
+                   style="display:block"
+                   data-ad-client="{{ adsense.client_id }}"
+                   data-ad-slot="{{ adsense.home_slot_id }}"
+                   data-ad-format="auto"
+                   data-full-width-responsive="true"></ins>
+            </div>
+            <script>
+              (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
+        </section>
+      {% endif %}
 
       <section class="section" id="tools">
         <div class="section-head">
