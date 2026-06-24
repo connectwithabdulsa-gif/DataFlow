@@ -29,6 +29,10 @@ SITE = {
     "repo_url": "https://github.com/connectwithabdulsa-gif/DataFlow",
 }
 
+ADSENSE_CLIENT_ID = os.environ.get("ADSENSE_CLIENT_ID", "").strip()
+ADSENSE_HOME_SLOT_ID = os.environ.get("ADSENSE_HOME_SLOT_ID", "").strip()
+ADSENSE_ENABLED_PAGES = {"home", "about", "terms", "contact"}
+
 NAV = [
     {"label": "Tools", "href": "/#tools"},
     {"label": "How it works", "href": "/#how-it-works"},
@@ -170,8 +174,8 @@ CONTENT_PAGES = {
             {
                 "heading": "Advertising",
                 "paragraphs": [
-                    "This site is being prepared for future advertising support. If ads are enabled later, the site will disclose that activity and may use standard cookie or advertising technologies required by the ad provider.",
-                    "You can review ad preferences and related controls through your browser or Google account settings if advertising is enabled in the future.",
+                    "This site is being prepared for advertising support through Google AdSense. If ads are enabled, the site may use cookies or similar technologies used by the ad provider to serve and measure ads.",
+                    "Visitors can review ad preferences in Google Ads Settings or use browser-based privacy controls and opt-out tools where available.",
                 ],
             },
         ],
@@ -249,6 +253,12 @@ def render_page(page_key):
         page_key=page_key,
         page=HOME_PAGE if page_key == "home" else CONTENT_PAGES[page_key],
         current_year=datetime.utcnow().year,
+        adsense={
+            "client_id": ADSENSE_CLIENT_ID,
+            "home_slot_id": ADSENSE_HOME_SLOT_ID,
+            "enabled": bool(ADSENSE_CLIENT_ID) and page_key in ADSENSE_ENABLED_PAGES,
+            "show_home_unit": bool(ADSENSE_CLIENT_ID and ADSENSE_HOME_SLOT_ID and page_key == "home"),
+        },
     )
 
 
@@ -258,6 +268,11 @@ def inject_globals():
         "site": SITE,
         "nav": NAV,
         "current_year": datetime.utcnow().year,
+        "adsense": {
+            "client_id": ADSENSE_CLIENT_ID,
+            "home_slot_id": ADSENSE_HOME_SLOT_ID,
+            "enabled": bool(ADSENSE_CLIENT_ID),
+        },
     }
 
 
